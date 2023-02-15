@@ -1,15 +1,15 @@
 void autopilot_loop() {
-    if(obstacle_position == 0){
+    if(obstacle_position() == "none"){
         // If there is no obstacle, go forward
         go_forward();
-    } else if(obstacle_position == 1){
+    } else if(obstacle_position() == "left"){
         // If there is an obstacle on the left, turn right
-        turn_right();
-    } else if(obstacle_position == 2){
+        rotate_right();
+    } else if(obstacle_position() == "front"){
         // If there is an obstacle in front, turn left
-        turn_left();
-    } else if(obstacle_position == 3){
+        rotate_left();
+    } else if(obstacle_position() == "right"){
         // If there is an obstacle on the right, turn left
-        turn_left();
+        rotate_left();
     }
 }

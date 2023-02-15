@@ -7,6 +7,8 @@ void led_off() {
 }
 
 void led_blink(int time) {
+    led_off(); // in case it was on already
+    delay(time);
     led_on();
     delay(time);
     led_off();

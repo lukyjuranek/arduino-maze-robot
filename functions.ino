@@ -1,8 +1,7 @@
-bool is_pressed(char key) {
+char get_key_pressed() {
     while (Serial.available() != 0) {
-        char character = Serial.read();
-        if (character == key) {
-            return true;
-        }
+        char key = Serial.read();
+        Serial.println(key + " pressed");
+        return key;
     }
 }
