@@ -1,11 +1,11 @@
 void servos_attach() {
     // Attach servos if they are not attached
     if (!leftServo.attached()){
-        leftServo.attach();
+        leftServo.attach(LEFT_SERVO_PIN);
     }
 
     if (!rigthServo.attached()){
-        rigthServo.attach();
+        rigthServo.attach(RIGHT_SERVO_PIN);
     }
 }
 

@@ -7,13 +7,14 @@ Servo rigthServo;
 #define ECHO_PIN_RIGHT 1
 #define TRIG_PIN_LEFT 4
 #define ECHO_PIN_LEFT 3
+// Pins for the servos
+#define RIGHT_SERVO_PIN 10
+#define LEFT_SERVO_PIN 9
 
-int SAFETY_DISTANCE = 15; // cm
-float MAIN_SPEED = 1.0; // 0-1 used to slow down all the movements
-String action = ""; // stop, forward, right, backward, left
-// int obstacle_position = 0; // 0 - none, 1 - left, 2 - front, 3 - right
-bool autopilot = false;
-char key_pressed;
+int SAFETY_DISTANCE = 15;  // cm
+float MAIN_SPEED = 1.0;    // 0-1 used to slow down all the movements
+String action = "";        // stop, forward, right, backward, left
+bool selfdriving = false;
 
 void setup() {
     // Sets the pins to output or input
@@ -30,8 +31,13 @@ void setup() {
     Serial.println("Press q to stop the robot");
     Serial.println("Press l to make the led blink");
     Serial.println("Press t to toggle the servos");
-    Serial.println("Press i to toggle the autopilot");
+    Serial.println("Press i to toggle the selfdriving");
     Serial.println("Press e to detach the servos which stops the robot");
+
+    // Makes the led blink 3 times with 1 s delay and rotates left and back
+    if (selfdriving) {
+        selfdriving_start_sequence();
+    }
 }
 
 void loop() {
@@ -50,9 +56,9 @@ void loop() {
     }
     Serial.println();
 
-    delay(200);
+    delay(200);  // Makes the printing slower
 
-    key_pressed = get_key_pressed();
+    char key_pressed = get_key_pressed();
     Serial.print(key_pressed + " pressed");
 
     // Changes the action based on the pressed key
@@ -95,32 +101,16 @@ void loop() {
         Serial.println("Toggling led");
 
     } else if (key_pressed == 'i') {
-        autopilot = !autopilot;
-        Serial.println("Toggling autopilot. autopilot = " + String(autopilot));
-        
+        // Toggles the selfdriving
+        selfdriving = !selfdriving;
+        Serial.println("Toggling selfdriving. selfdriving = " + String(selfdriving));
+
     } else {
         ;
     }
 
-    if (autopilot) {
-        autopilot_loop();
+    // Run the selfdriving if it is enabled
+    if (selfdriving) {
+        seldriving_loop();
     }
-
-    //
-    //    // Make the switch stataement into and if else
-    //    if (action == 0) {
-    //        stop();
-    //    } else if (action == 1) {
-    //        go_forward();
-    //    } else if (action == 2) {
-    //        rotate_right();
-    //    } else if (action == 3) {
-    //        go_backward();
-    //    } else if (action == 4) {
-    //        rotate_left();
-    //    } else if (action == 5) {
-    //        autopilot_loop();
-    //    } else {
-    //        stop();
-    //    }
 }
