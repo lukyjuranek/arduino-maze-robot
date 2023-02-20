@@ -30,9 +30,10 @@ void setup() {
     Serial.println("Press w, a, s, d to move the robot");
     Serial.println("Press q to stop the robot");
     Serial.println("Press l to make the led blink");
-    Serial.println("Press t to toggle the servos");
+    Serial.println("Press t to toggle the LED");
     Serial.println("Press i to toggle the selfdriving");
     Serial.println("Press e to detach the servos which stops the robot");
+    // Automatically attaches the servos if they are not attached when they're needed again
 
     // Makes the led blink 3 times with 1 s delay and rotates left and back
     if (selfdriving) {

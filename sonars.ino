@@ -6,7 +6,7 @@ double get_distance_cm(int trig_pin, int echo_pin) {
     digitalWrite(trig_pin, LOW);
     long duration = pulseIn(echo_pin, HIGH);
     // int distance = duration * 0.034 / 2;
-    int distance_cm = duration / 2 * 29.1;
+    long distance_cm = duration / 2 * 29.1;
     return distance_cm;
 }
 
