@@ -3,15 +3,15 @@ Servo leftServo;
 Servo rigthServo;
 
 // Pins for the ultrasonic sensors
-#define TRIG_PIN_RIGHT 2
-#define ECHO_PIN_RIGHT 1
-#define TRIG_PIN_LEFT 4
-#define ECHO_PIN_LEFT 3
+#define TRIG_PIN_RIGHT 4
+#define ECHO_PIN_RIGHT 3
+#define TRIG_PIN_LEFT 6
+#define ECHO_PIN_LEFT 5
 // Pins for the servos
 #define RIGHT_SERVO_PIN 10
 #define LEFT_SERVO_PIN 9
 
-int SAFETY_DISTANCE = 15;  // cm
+int SAFETY_DISTANCE = 10;  // cm
 float MAIN_SPEED = 1.0;    // 0-1 used to slow down all the movements
 String action = "";        // stop, forward, right, backward, left
 bool selfdriving = false;
@@ -52,9 +52,9 @@ void loop() {
     Serial.print("Obstacle pos: " + String(obstacle_position()));
 
     // Prints the wall angle if there is a wall in front
-    if (obstacle_position() == "front") {
-        Serial.print(" Wall angle: " + String(wall_angle()));
-    }
+    // if (obstacle_position() == "front") {
+    //     Serial.print(" Wall angle: " + String(wall_angle()));
+    // }
     Serial.println();
 
     delay(200);  // Makes the printing slower

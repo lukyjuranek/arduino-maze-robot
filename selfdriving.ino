@@ -1,14 +1,15 @@
 void seldriving_loop() {
-    if(obstacle_position() == "none"){
+    String obstacle = obstacle_position();
+    if(obstacle == "none"){
         // If there is no obstacle, go forward
         go_forward();
-    } else if(obstacle_position() == "left"){
+    } else if(obstacle == "left"){
         // If there is an obstacle on the left, turn right
         rotate_right();
-    } else if(obstacle_position() == "front"){
+    } else if(obstacle == "front"){
         // If there is an obstacle in front, turn left
         go_backward();
-    } else if(obstacle_position() == "right"){
+    } else if(obstacle == "right"){
         // If there is an obstacle on the right, turn left
         rotate_left();
     }
