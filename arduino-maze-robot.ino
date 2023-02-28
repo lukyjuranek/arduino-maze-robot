@@ -1,3 +1,8 @@
+/*
+Author: Lukas Juranek
+Description: This Arduino project controls a two-wheeled robot with two ultrasonic sensors. The robot can be controlled with a keyboard, or set to self-drive and avoid obstacles. 
+*/
+
 #include <Servo.h>
 Servo leftServo;
 Servo rigthServo;
@@ -12,9 +17,10 @@ Servo rigthServo;
 #define LEFT_SERVO_PIN 9
 
 int SAFETY_DISTANCE = 10;  // cm
-float MAIN_SPEED = 1.0;    // 0-1 used to slow down all the movements
-String action = "";        // stop, forward, right, backward, left
-bool selfdriving = false;
+float MAIN_SPEED = 1.0;    // 0.0-1.0 used to slow down all the movements, affects the functionality beacasue the movements are based on time so slowing it down will make the robot make smaller movements and might make it act differently
+bool selfdriving = true;
+bool print_instructions = false;
+bool print_debug_info = false;
 
 void setup() {
     // Sets the pins to output or input
@@ -27,91 +33,29 @@ void setup() {
     // Assigns servo pins
     servos_attach();
     // Prints the instructions
-    Serial.println("Press w, a, s, d to move the robot");
-    Serial.println("Press q to stop the robot");
-    Serial.println("Press l to make the led blink");
-    Serial.println("Press t to toggle the LED");
-    Serial.println("Press i to toggle the selfdriving");
-    Serial.println("Press e to detach the servos which stops the robot");
-    // Automatically attaches the servos if they are not attached when they're needed again
+    if (print_instructions) {
+        print_keyboard_controls_instructions();
+    }
 
-    // Makes the led blink 3 times with 1 s delay and rotates left and back
+    // Makes the led blink 3 times and moves the robot forward and backward
     if (selfdriving) {
         selfdriving_start_sequence();
     }
 }
 
 void loop() {
-    Serial.print("Action: " + action);
-    Serial.print(" ServoL: " + leftServo.read());
-    Serial.println(" ServoR: " + rigthServo.read());
-
-    // Prints the distance from the left and right sensors
-    Serial.print("SonarL: " + String(get_distance_cm(ECHO_PIN_LEFT, TRIG_PIN_LEFT)));
-    Serial.print(" SonarR: " + String(get_distance_cm(ECHO_PIN_RIGHT, TRIG_PIN_RIGHT)));
-    Serial.print("Obstacle pos: " + String(obstacle_position()));
-
-    // Prints the wall angle if there is a wall in front
-    // if (obstacle_position() == "front") {
-    //     Serial.print(" Wall angle: " + String(wall_angle()));
-    // }
-    Serial.println();
-
-    delay(200);  // Makes the printing slower
-
-    char key_pressed = get_key_pressed();
-    Serial.print(key_pressed + " pressed");
-
-    // Changes the action based on the pressed key
-    if (key_pressed == 'w') {
-        action = "forward";
-        go_forward();
-        Serial.println("Moving forward");
-
-    } else if (key_pressed == 'd') {
-        action = "right";
-        rotate_right();
-        Serial.println("Turning right");
-
-    } else if (key_pressed == 's') {
-        action = "backward";
-        go_backward();
-        Serial.println("Moving backward");
-
-    } else if (key_pressed == 'a') {
-        action = "left";
-        rotate_left();
-        Serial.println("Turning left");
-
-    } else if (key_pressed == 'q') {
-        action = "stop";
-        stop();
-        Serial.println("Stopping");
-
-    } else if (key_pressed == 'e') {
-        action = "detach_servos";
-        servos_detach();
-        Serial.println("Detaching servos");
-
-    } else if (key_pressed == 'l') {
-        led_blink(100);
-        Serial.println("Blinking led");
-
-    } else if (key_pressed == 't') {
-        led_toggle();
-        Serial.println("Toggling led");
-
-    } else if (key_pressed == 'i') {
-        // Toggles the selfdriving
-        selfdriving = !selfdriving;
-        Serial.println("Toggling selfdriving. selfdriving = " + String(selfdriving));
-
-    } else {
-        ;
+    // Careful, this is slows down the robot
+    if (print_debug_info) {
+        // Prints the distance from the left and right sensors
+        print_sonar_info();
+        delay(500);  // Makes the printing slower
     }
 
-    // Run the selfdriving if it is enabled
+    // Runs the selfdriving if it is enabled
+    // Checks the obstacle position and moves accordingly
     if (selfdriving) {
         seldriving_loop();
     }
+
+    keyboard_controls(get_key_pressed());
 }
