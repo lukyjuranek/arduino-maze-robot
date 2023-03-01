@@ -1,5 +1,5 @@
 /*
-Author: Lukas Juranek
+Author: Lukas Juranek, Laith Elbeshti
 Description: This Arduino project controls a two-wheeled robot with two ultrasonic sensors. The robot can be controlled with a keyboard, or set to self-drive and avoid obstacles. 
 */
 
@@ -54,7 +54,7 @@ void loop() {
     // Runs the selfdriving if it is enabled
     // Checks the obstacle position and moves accordingly
     if (selfdriving) {
-        seldriving_loop();
+        selfdriving_loop();
     }
 
     keyboard_controls(get_key_pressed());

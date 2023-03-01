@@ -9,7 +9,7 @@ void selfdriving_loop() {
         rotate_left();
     } else if (obstacle == "front") {
         // If there is an obstacle in front, try turning left or right
-        rotate_left();
+        rotate_right();
         delay(500);  // Wait for turn to complete
         obstacle = obstacle_position();
         if (obstacle != "front") {
@@ -17,8 +17,8 @@ void selfdriving_loop() {
             go_forward();
         } else {
             // Otherwise, try turning right
-            rotate_right();
-            delay(500);
+            rotate_left();
+            delay(1500);
             obstacle = obstacle_position();
             if (obstacle != "front") {
                 // If turning right cleared the obstacle, continue in new direction
@@ -39,14 +39,14 @@ void selfdriving_loop() {
 
 void selfdriving_start_sequence() {
     // Makes the led blink 3 times and moves the robot forward and backward
+    servos_detach();
     for (int i = 0; i < 3; i++) {
-        led_blink(500);
-        // delay(1000);
+        led_blink(400);
     }
     go_forward();
-    delay(1000);
+    delay(500);
     go_backward();
-    delay(1000);
+    delay(500);
     stop();
-    delay(1000);
+    delay(500);
 }
